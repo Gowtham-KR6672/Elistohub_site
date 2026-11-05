@@ -1,9 +1,12 @@
 # Elistohub website
 
 Marketing site for Elistohub, an ecommerce growth and support agency.
-Built with **React 19 + Vite**, **React Router**, **Tailwind CSS v4**, and a small **PHP** script that sends
-contact-form enquiries through **Brevo**. The build is plain static files, so it runs on ordinary
-Linux/cPanel hosting such as **BigRock**.
+Built with **React 19 + Vite**, **React Router** and **Tailwind CSS v4**. Contact-form enquiries are sent
+through **Brevo**. The same code deploys two ways:
+
+- **PHP / cPanel hosting (BigRock):** upload the static build; `api/contact.php` handles the form.
+- **Node hosting (Render, Railway, a VPS):** `npm start` runs `server/serve.mjs`, which serves the build and
+  handles the form.
 
 ## Pages
 
@@ -23,10 +26,34 @@ cp .env.example .env.local   # add your Brevo values for local form testing
 npm run dev                  # http://localhost:3000
 ```
 
-`npm run dev` can't run PHP, so `server/dev-contact.ts` stands in for `api/contact.php` locally and sends
-through Brevo using `.env.local`. On the live site the real PHP file is used.
+`npm run dev` can't run PHP, so it handles `/api/contact.php` with the Node version of the form logic
+(`server/contact-handler.mjs`) and sends through Brevo using `.env.local`.
 
-Other scripts: `npm run build` (production build into `dist/`), `npm run preview` (serve the build), `npm run lint`.
+Other scripts: `npm run build` (production build into `dist/`), `npm start` (production Node server on `PORT`,
+default 3000), `npm run preview`, `npm run lint`.
+
+## Deploy to Render (Node web service)
+
+| Setting | Value |
+| --- | --- |
+| Service type | **Web Service** (not Static Site, since the contact form needs the server) |
+| Build Command | `npm ci && npm run build` |
+| Start Command | `npm start` |
+
+Environment variables:
+
+| Key | Value |
+| --- | --- |
+| `NODE_VERSION` | `22` |
+| `BREVO_API_KEY` | Brevo API key |
+| `EMAIL_FROM_ADDRESS` | Verified Brevo sender, e.g. `dev.elistohub@gmail.com` |
+| `EMAIL_FROM_NAME` | `Elistohub` |
+| `CONTACT_TO_EMAIL` | Inbox(es) for enquiries, comma-separated |
+| `VITE_SITE_URL` | Public URL, e.g. `https://elistohub-site.onrender.com` (used at build time) |
+| `BREVO_LIST_ID`, `CONTACT_SEND_CONFIRMATION` | Optional, same meaning as below |
+
+The server listens on Render's `PORT` automatically. It serves `/assets/*` with long-term caching, sends page URLs
+like `/contact` to the app, blocks hidden files and PHP sources, and limits each visitor to 5 messages per 10 minutes.
 
 ## Deploy to BigRock (Linux hosting with cPanel)
 
@@ -97,8 +124,10 @@ public/
   .htaccess                Apache rules for BigRock
   api/contact.php          Production contact endpoint (Brevo)
 server/
-  dev-contact.ts           Local stand-in for contact.php (npm run dev only)
-  elistohub-config.example.php
+  serve.mjs                Production Node server (npm start) for Render and other Node hosts
+  contact-handler.mjs      Contact form logic for Node (used by serve.mjs and npm run dev)
+  dev-contact.ts           Hooks the handler into `npm run dev`
+  elistohub-config.example.php   Settings template for the PHP version
 src/
   main.tsx, App.tsx        Entry point and routes
   index.css                Brand tokens, Tailwind theme, animations
