@@ -1,5 +1,3 @@
-"use client";
-
 import { useRef, useState, type PointerEvent } from "react";
 import { Icon } from "@/components/icons";
 

@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { Link } from "react-router";
 import { Icon } from "@/components/icons";
 import { Logo } from "@/components/logo";
 import { Container } from "@/components/ui";
@@ -12,7 +12,7 @@ export function Footer() {
       <Container className="relative pt-20 pb-10">
         <div className="grid gap-12 lg:grid-cols-[1.3fr_2fr]">
           <div className="max-w-sm">
-            <Link href="/" aria-label="Elistohub home" className="inline-flex rounded-xl">
+            <Link to="/" aria-label="Elistohub home" className="inline-flex rounded-xl">
               <Logo tone="dark" />
             </Link>
             <p className="mt-5 leading-relaxed">
@@ -28,7 +28,7 @@ export function Footer() {
                 <ul className="flex flex-col gap-2.5">
                   {col.links.map((link) => (
                     <li key={link.label}>
-                      <Link href={link.href} className="transition-colors hover:text-sun">
+                      <Link to={link.href} className="transition-colors hover:text-sun">
                         {link.label}
                       </Link>
                     </li>
@@ -50,12 +50,12 @@ export function Footer() {
                   </a>
                 </li>
                 <li>
-                  <Link href="/#faq" className="transition-colors hover:text-sun">
+                  <Link to="/#faq" className="transition-colors hover:text-sun">
                     FAQ
                   </Link>
                 </li>
                 <li>
-                  <Link href="/contact" className="transition-colors hover:text-sun">
+                  <Link to="/contact" className="transition-colors hover:text-sun">
                     Contact
                   </Link>
                 </li>
@@ -76,10 +76,10 @@ export function Footer() {
             © {siteConfig.copyrightYear} {siteConfig.name}
           </p>
           <p className="flex gap-6">
-            <Link href="/privacy" className="transition-colors hover:text-sun">
+            <Link to="/privacy" className="transition-colors hover:text-sun">
               Privacy
             </Link>
-            <Link href="/terms" className="transition-colors hover:text-sun">
+            <Link to="/terms" className="transition-colors hover:text-sun">
               Terms
             </Link>
           </p>

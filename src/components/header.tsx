@@ -1,7 +1,4 @@
-"use client";
-
-import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { Link, useLocation } from "react-router";
 import { useEffect, useState } from "react";
 import { Icon } from "@/components/icons";
 import { Logo } from "@/components/logo";
@@ -28,7 +25,7 @@ export function AnnouncementBar() {
 export function Header() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
-  const pathname = usePathname();
+  const { pathname } = useLocation();
   const isActive = (href: string) => pathname === href;
 
   useEffect(() => {
@@ -64,7 +61,7 @@ export function Header() {
             : "border-transparent bg-transparent",
         )}
       >
-        <Link href="/" aria-label="Elistohub home" className="rounded-xl" onClick={close}>
+        <Link to="/" aria-label="Elistohub home" className="rounded-xl" onClick={close}>
           <Logo />
         </Link>
 
@@ -72,7 +69,7 @@ export function Header() {
           {mainNav.map((item) => (
             <Link
               key={item.href}
-              href={item.href}
+              to={item.href}
               aria-current={isActive(item.href) ? "page" : undefined}
               className={cn(
                 "rounded-full px-4 py-2.5 text-[15px] font-medium whitespace-nowrap transition-colors hover:bg-tint hover:text-deep",
@@ -119,7 +116,7 @@ export function Header() {
               {mainNav.map((item, i) => (
                 <li key={item.href}>
                   <Link
-                    href={item.href}
+                    to={item.href}
                     onClick={close}
                     aria-current={isActive(item.href) ? "page" : undefined}
                     className={cn(

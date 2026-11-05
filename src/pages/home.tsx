@@ -1,3 +1,4 @@
+import { Seo } from "@/components/seo";
 import { AiSection } from "@/components/sections/ai";
 import { AiImages } from "@/components/sections/ai-images";
 import { CaseStudies } from "@/components/sections/case-studies";
@@ -14,6 +15,7 @@ import { Websites } from "@/components/sections/websites";
 export default function HomePage() {
   return (
     <>
+      <Seo />
       <Hero />
       <Marketplaces />
       <Services />

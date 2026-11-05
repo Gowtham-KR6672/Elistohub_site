@@ -1,5 +1,3 @@
-"use client";
-
 import { useId, useState } from "react";
 import { Icon } from "@/components/icons";
 import { cn } from "@/lib/cn";

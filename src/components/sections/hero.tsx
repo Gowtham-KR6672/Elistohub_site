@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { Link } from "react-router";
 import type { CSSProperties } from "react";
 import { Icon } from "@/components/icons";
 import { ButtonLink, CheckItem, Container, Highlight } from "@/components/ui";
@@ -110,7 +110,7 @@ export function Hero() {
       <Container className="grid items-center gap-16 pt-12 pb-24 xl:grid-cols-[1.2fr_0.8fr] xl:gap-12 lg:pt-20 lg:pb-32">
         <div className="animate-fade-up">
           <Link
-            href="/#ai"
+            to="/#ai"
             className="group inline-flex items-center gap-3 rounded-full border border-brand/15 bg-white/80 p-1 pr-4 text-sm font-semibold text-deep shadow-sm backdrop-blur transition-colors hover:border-brand/40"
           >
             <span className="rounded-full bg-brand px-2.5 py-1 text-xs tracking-wide text-white">NEW</span>

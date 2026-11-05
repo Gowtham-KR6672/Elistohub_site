@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { Link } from "react-router";
 import type { ComponentProps, ReactNode } from "react";
 import { cn } from "@/lib/cn";
 import { Icon } from "@/components/icons";
@@ -92,14 +92,14 @@ export function ButtonLink({
   className,
   children,
   ...rest
-}: Omit<ComponentProps<typeof Link>, "href"> & {
+}: Omit<ComponentProps<typeof Link>, "to"> & {
   href: string;
   variant?: keyof typeof buttonVariants;
   size?: keyof typeof buttonSizes;
   arrow?: boolean;
 }) {
   return (
-    <Link href={href} className={cn(buttonBase, buttonVariants[variant], buttonSizes[size], className)} {...rest}>
+    <Link to={href} className={cn(buttonBase, buttonVariants[variant], buttonSizes[size], className)} {...rest}>
       {children}
       {arrow ? (
         <Icon name="arrow" size={18} strokeWidth={2.2} className="transition-transform duration-200 group-hover:translate-x-1" />

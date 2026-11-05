@@ -1,7 +1,5 @@
-"use client";
-
 import { useActionState, useState, type ReactNode } from "react";
-import { submitContact, type ContactState } from "@/app/actions/contact";
+import { submitContact, type ContactState } from "@/lib/contact-client";
 import { Icon } from "@/components/icons";
 import { cn } from "@/lib/cn";
 import { contactNeeds } from "@/lib/content";

@@ -16,8 +16,8 @@
   --border: #e6ebe8;
   --off-white: #fafbf9;
   --white: #ffffff;
-  --font-heading: var(--font-bricolage), "Bricolage Grotesque", sans-serif;
-  --font-body: var(--font-inter), "Inter", sans-serif;
+  --font-heading: "Bricolage Grotesque Variable", "Bricolage Grotesque", sans-serif;
+  --font-body: "Inter Variable", "Inter", system-ui, sans-serif;
 
   /* supporting shades used on deep-green surfaces */
   --deep-green-2: #0e5a3b;

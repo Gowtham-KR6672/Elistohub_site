@@ -1,5 +1,3 @@
-"use client";
-
 import { useEffect, useRef, useState, type ReactNode } from "react";
 
 const prefersReducedMotion = () =>
@@ -54,12 +52,11 @@ export function CountUp({ value, prefix = "", suffix = "" }: { value: number; pr
   useEffect(() => {
     const el = ref.current;
     if (!el || prefersReducedMotion()) return;
-    let raf = 0;
-    let first = true;
+    const run = { raf: 0, first: true };
     const io = new IntersectionObserver(
       ([entry]) => {
-        if (first) {
-          first = false;
+        if (run.first) {
+          run.first = false;
           // Already on screen when the page loaded: keep the final number.
           if (entry.isIntersecting) {
             io.disconnect();
@@ -75,16 +72,16 @@ export function CountUp({ value, prefix = "", suffix = "" }: { value: number; pr
         const tick = (now: number) => {
           const p = Math.min(1, (now - start) / duration);
           setDisplay(Math.round(value * (1 - Math.pow(1 - p, 3))));
-          if (p < 1) raf = requestAnimationFrame(tick);
+          if (p < 1) run.raf = requestAnimationFrame(tick);
         };
-        raf = requestAnimationFrame(tick);
+        run.raf = requestAnimationFrame(tick);
       },
       { threshold: 0.6 },
     );
     io.observe(el);
     return () => {
       io.disconnect();
-      cancelAnimationFrame(raf);
+      cancelAnimationFrame(run.raf);
     };
   }, [value]);
 

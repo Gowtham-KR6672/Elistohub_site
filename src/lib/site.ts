@@ -3,7 +3,8 @@ export const siteConfig = {
   title: "Elistohub - Ecommerce Outsourcing Agency",
   description:
     "Elistohub is your ecommerce growth and support partner. Marketplaces, listings, inventory, ads, AI support and websites, all run by one senior team.",
-  url: process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000",
+  /** Public site URL, e.g. https://www.elistohub.com (set VITE_SITE_URL at build time). */
+  url: ((import.meta.env.VITE_SITE_URL as string | undefined) ?? "").replace(/\/$/, ""),
   email: "hello@elistohub.com",
   location: "Mumbai, India",
   copyrightYear: 2026,

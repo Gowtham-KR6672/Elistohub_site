@@ -1,78 +1,116 @@
 # Elistohub website
 
 Marketing site for Elistohub, an ecommerce growth and support agency.
-Built with **Next.js 16** (App Router), **React 19**, **Tailwind CSS v4** and **Brevo** for contact-form email.
+Built with **React 19 + Vite**, **React Router**, **Tailwind CSS v4**, and a small **PHP** script that sends
+contact-form enquiries through **Brevo**. The build is plain static files, so it runs on ordinary
+Linux/cPanel hosting such as **BigRock**.
 
 ## Pages
 
 | Route | Status |
 | --- | --- |
-| `/` | Live: full home page (hero, services, websites, AI, AI images, support, email, tech stack, reporting, case studies, FAQ, contact) |
-| `/contact` | Live: contact form (sends email through Brevo) + FAQ |
+| `/` | Live: full home page |
+| `/contact` | Live: contact form + FAQ |
 | `/services`, `/marketplaces`, `/websites`, `/ai`, `/case-studies`, `/privacy`, `/terms` | Coming soon |
 
-Coming-soon pages are listed in `src/lib/site.ts` (`comingSoonPages`). To launch one, replace its
-`src/app/<route>/page.tsx` with the real page content and remove it from `comingSoonPages`. They are marked
-`noindex` and are left out of the sitemap until then.
+Coming-soon pages are listed in `src/lib/site.ts` (`comingSoonPages`) and routed in `src/App.tsx`.
 
-## Getting started
+## Local development
 
 ```bash
 npm install
-cp .env.example .env.local   # then fill in the values
+cp .env.example .env.local   # add your Brevo values for local form testing
 npm run dev                  # http://localhost:3000
 ```
 
-Other scripts: `npm run build` (production build), `npm start` (serve the build), `npm run lint`.
+`npm run dev` can't run PHP, so `server/dev-contact.ts` stands in for `api/contact.php` locally and sends
+through Brevo using `.env.local`. On the live site the real PHP file is used.
 
-## Contact form (Brevo)
+Other scripts: `npm run build` (production build into `dist/`), `npm run preview` (serve the build), `npm run lint`.
 
-The form on `/` and `/contact` posts to a Server Action (`src/app/actions/contact.ts`), which validates the
-input and sends an email through the Brevo transactional email API (`src/lib/brevo.ts`).
+## Deploy to BigRock (Linux hosting with cPanel)
 
-1. In Brevo, create an API key: **Settings → SMTP & API → API keys**.
-2. Verify the sender address or domain you will send from: **Senders, domains & dedicated IPs**.
-3. Fill in `.env.local`:
+### One-time setup
 
-| Variable | Required | What it does |
+1. **Brevo settings file.** Copy `server/elistohub-config.example.php` to `elistohub-config.php`, fill in the
+   values (Brevo API key, sender, inbox), and upload it with cPanel **File Manager** to your **home folder, one
+   level above `public_html`** (for example `/home/<cpanel-user>/elistohub-config.php`).
+   Never put it inside `public_html`.
+2. **Site URL.** In `.env.production`, set `VITE_SITE_URL` to your domain (e.g. `https://www.elistohub.com`).
+   It's used for canonical links, `sitemap.xml` and `robots.txt`.
+3. **SSL.** In cPanel, open **SSL/TLS Status** and run AutoSSL (or install the free certificate BigRock offers).
+   Once HTTPS works, you can force it by removing the `#` from the two HTTPS lines in `public/.htaccess`.
+
+### Every deploy
+
+1. Build:
+   ```bash
+   npm run build
+   ```
+2. In cPanel **File Manager**, open `public_html` and delete the old site files (keep `.well-known` and `cgi-bin`
+   if present).
+3. Upload **everything inside `dist/`** into `public_html`, including the hidden `.htaccess` file and the
+   `api/` folder. Easiest: zip the contents of `dist/`, upload the zip, then use **Extract** in File Manager.
+   Turn on **Settings → Show Hidden Files** to see `.htaccess`.
+4. Open the site and send one test enquiry from the contact page.
+
+Your `public_html` should look like:
+
+```
+public_html/
+  .htaccess        page routing (/contact etc.), caching
+  index.html
+  favicon.svg
+  robots.txt
+  sitemap.xml      (only when VITE_SITE_URL is set)
+  assets/          JS, CSS, fonts
+  api/contact.php  contact form → Brevo
+```
+
+## Contact form
+
+- The form (`src/components/contact-form.tsx`) checks the fields in the browser, then posts JSON to
+  `/api/contact.php`.
+- `public/api/contact.php` validates again, blocks spam bots (hidden honeypot field), limits each visitor to
+  5 messages per 10 minutes, and sends the enquiry through the Brevo API with the visitor as **Reply-To**.
+- Settings (in `elistohub-config.php`):
+
+| Setting | Required | What it does |
 | --- | --- | --- |
-| `BREVO_API_KEY` | Yes | Brevo API key (keep it secret, never commit it) |
-| `CONTACT_TO_EMAIL` | Yes | Inbox that receives new enquiries. Comma-separate several addresses |
-| `EMAIL_FROM_ADDRESS` | Yes | Sender address; must be verified in Brevo |
-| `EMAIL_FROM_NAME` | No | Sender name (default `Elistohub Website`) |
+| `BREVO_API_KEY` | Yes | Brevo API key (Settings → SMTP & API → API keys) |
+| `EMAIL_FROM_ADDRESS` | Yes | Sender; must be verified in Brevo |
+| `EMAIL_FROM_NAME` | No | Sender name (default `Elistohub`) |
+| `CONTACT_TO_EMAIL` | Yes | Inbox(es) for enquiries, comma-separated |
 | `BREVO_LIST_ID` | No | Also saves each enquiry as a Brevo contact in this list |
-| `CONTACT_SEND_CONFIRMATION` | No | `true` sends the visitor a "we got your message" email (default `false`) |
-| `NEXT_PUBLIC_SITE_URL` | No | Public site URL, used for metadata, sitemap and robots.txt |
+| `CONTACT_SEND_CONFIRMATION` | No | `'true'` emails the visitor a "we got your message" note |
+| `SITE_EMAIL` | No | Address shown to visitors if sending fails |
 
-Enquiry emails use the visitor's address as **Reply-To**, so you can answer straight from your inbox.
-If Brevo isn't configured, the form shows a friendly error with the email address and logs the reason on the server.
-A hidden honeypot field filters simple spam bots.
-
-When deploying (Vercel or any Node host), add the same variables in the host's environment settings.
+Needs PHP 7.4 or newer with the cURL extension (standard on BigRock). PHP errors are written to the
+`error_log` file in `public_html/api/`.
 
 ## Project structure
 
 ```
+index.html                 HTML shell
+vite.config.ts             Vite config (+ robots/sitemap generation, local contact API)
+public/
+  .htaccess                Apache rules for BigRock
+  api/contact.php          Production contact endpoint (Brevo)
+server/
+  dev-contact.ts           Local stand-in for contact.php (npm run dev only)
+  elistohub-config.example.php
 src/
-  app/
-    layout.tsx            Fonts, metadata, header, footer
-    page.tsx              Home page (composes the sections)
-    contact/page.tsx      Contact page
-    actions/contact.ts    Server Action: validate + send via Brevo
-    <route>/page.tsx      Coming-soon pages
-    globals.css           Brand tokens, Tailwind theme, animations
-  components/
-    sections/             One file per home page section
-    header.tsx, footer.tsx, contact-form.tsx, coming-soon.tsx, ...
-  lib/
-    content.ts            All page copy and lists (edit text here)
-    site.ts               Site name, email, nav and coming-soon pages
-    brevo.ts              Brevo API client
-    contact-emails.ts     Email templates (team notification + confirmation)
+  main.tsx, App.tsx        Entry point and routes
+  index.css                Brand tokens, Tailwind theme, animations
+  pages/                   Home, Contact, 404
+  components/sections/     One file per home page section
+  components/              Header, footer, form, coming soon, SEO, UI pieces
+  lib/content.ts           All page copy and lists (edit text here)
+  lib/site.ts              Site name, email, nav, coming-soon pages
 ```
 
 ## Brand
 
-Colours are defined once in `src/app/globals.css` (`:root`) and exposed to Tailwind as `deep`, `brand`, `fresh`,
-`mint`, `tint`, `sun`, `logo-yellow`, `sun-tint`, `gold`, `ink`, `muted`, `line`, `off`.
-Fonts: **Bricolage Grotesque** (logo and headings, 700/800) and **Inter** (body, menus, buttons, forms), loaded with `next/font`.
+Colours are defined once in `src/index.css` (`:root`) and exposed to Tailwind as `deep`, `brand`, `fresh`, `mint`,
+`tint`, `sun`, `logo-yellow`, `sun-tint`, `gold`, `ink`, `muted`, `line`, `off`.
+Fonts: **Bricolage Grotesque** (logo and headings) and **Inter** (body), self-hosted via Fontsource.
