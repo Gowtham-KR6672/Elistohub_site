@@ -53,7 +53,7 @@ function ActivityCard() {
             return (
               <li
                 key={item.code}
-                className="animate-feed-in flex items-center gap-3.5 py-3.5 last:pb-1"
+                className="animate-feed-in flex items-center gap-3.5 py-3.5"
                 style={{ animationDelay: `${450 + i * 140}ms` } as CSSProperties}
               >
                 <span
@@ -80,18 +80,22 @@ function ActivityCard() {
             );
           })}
         </ul>
-      </div>
 
-      <div
-        className="animate-float absolute -bottom-8 -left-3 hidden items-center gap-3 rounded-2xl border border-line bg-white px-4 py-3 shadow-[0_24px_50px_-24px_rgba(5,59,44,0.5)] sm:flex lg:-left-12"
-        aria-hidden="true"
-      >
-        <span className="grid size-10 place-items-center rounded-xl bg-deep text-sun">
-          <Icon name="file" size={20} />
-        </span>
-        <div>
-          <p className="text-sm font-semibold text-deep">Weekly updates</p>
-          <p className="text-xs text-muted">+ monthly reports</p>
+        <div
+          className="animate-feed-in relative mt-2 flex items-center gap-3.5 overflow-hidden rounded-2xl bg-deep px-4 py-3.5 text-white"
+          style={{ animationDelay: `${450 + heroFeed.length * 140}ms` } as CSSProperties}
+        >
+          <div className="bg-grid-dark pointer-events-none absolute inset-0 opacity-70" aria-hidden="true" />
+          <span className="relative grid size-10 shrink-0 place-items-center rounded-xl bg-white/10 text-sun">
+            <Icon name="file" size={20} />
+          </span>
+          <div className="relative min-w-0 flex-1">
+            <p className="text-[15px] leading-snug font-semibold">Weekly updates + monthly reports</p>
+            <p className="truncate text-[13px] text-frost">Your week in 30 seconds</p>
+          </div>
+          <span className="relative hidden shrink-0 rounded-full bg-sun px-2.5 py-1 text-xs font-bold text-deep 2xl:inline-flex">
+            Every week
+          </span>
         </div>
       </div>
     </div>
