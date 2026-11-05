@@ -2,9 +2,9 @@ import type { CSSProperties } from "react";
 import { Icon } from "@/components/icons";
 import { LogoMark } from "@/components/logo";
 import { InView } from "@/components/motion";
-import { Container, Eyebrow, Highlight, Pill, headingXL } from "@/components/ui";
+import { Container, Highlight, Pill, SectionHeader } from "@/components/ui";
 import { cn } from "@/lib/cn";
-import { commTools, reportingCadence, weeklyUpdate } from "@/lib/content";
+import { commTools, reportingCadence, techStack, weeklyUpdate } from "@/lib/content";
 
 const tagTone = {
   green: "bg-tint text-brand",
@@ -67,27 +67,55 @@ function UpdateCard() {
   );
 }
 
-export function Reporting() {
+/** Tools + reporting, merged: "Your tools, your channels. We plug right in." (Our process page) */
+export function ToolsAndReporting() {
+  const rows = [
+    ...techStack,
+    { category: "Communication", tools: commTools, extra: "Whatever you like" },
+  ];
+
   return (
-    <section id="reporting" className="overflow-hidden bg-off py-24 sm:py-32">
-      <Container className="grid items-center gap-16 lg:grid-cols-[1.1fr_0.9fr]">
-        <div className="reveal">
-          <Eyebrow>Communication &amp; reporting</Eyebrow>
-          <h2 className={cn(headingXL, "mt-5 text-deep")}>
-            Slack? ClickUp? Email? <Highlight>We’ll plug right in.</Highlight>
-          </h2>
-          <p className="mt-6 text-lg leading-relaxed text-muted">
-            We work wherever you’re comfortable - no new apps, no extra logins, no chasing us for updates.
-          </p>
-          <ul className="mt-8 flex flex-wrap gap-2.5">
-            {commTools.map((tool) => (
-              <Pill key={tool}>{tool}</Pill>
-            ))}
-            <Pill active>Whatever you like</Pill>
-          </ul>
-          <div className="mt-10 grid gap-4 sm:grid-cols-2">
+    <section id="tools" className="overflow-hidden bg-off py-24 sm:py-32">
+      <Container>
+        <SectionHeader
+          eyebrow="Tools & how we work"
+          title={
+            <>
+              Your tools, your channels. <Highlight>We plug right in.</Highlight>
+            </>
+          }
+          intro="No learning curve on your dime and no new apps for you. We work inside the platforms you already run on, and talk to you wherever you’re comfortable."
+        />
+
+        <div className="mt-14 overflow-hidden rounded-[32px] border border-line bg-white">
+          {rows.map((group, i) => (
+            <div
+              key={group.category}
+              className="reveal grid gap-5 border-line p-6 transition-colors hover:bg-off sm:p-8 md:grid-cols-[280px_1fr] md:items-center [&:not(:first-child)]:border-t"
+            >
+              <div className="flex items-center gap-4">
+                <span className="font-display text-sm font-bold text-brand tabular-nums">
+                  {String(i + 1).padStart(2, "0")}
+                </span>
+                <div>
+                  <h3 className="font-display text-[20px] font-bold text-deep">{group.category}</h3>
+                  <p className="text-sm text-muted">{group.tools.length} tools</p>
+                </div>
+              </div>
+              <ul className="flex flex-wrap gap-2.5">
+                {group.tools.map((tool) => (
+                  <Pill key={tool}>{tool}</Pill>
+                ))}
+                {group.extra ? <Pill active>{group.extra}</Pill> : null}
+              </ul>
+            </div>
+          ))}
+        </div>
+
+        <div className="mt-5 grid items-center gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:gap-16">
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-1">
             {reportingCadence.map((c) => (
-              <div key={c.title} className="rounded-3xl border border-line bg-white p-6">
+              <div key={c.title} className="reveal rounded-3xl border border-line bg-white p-6 sm:p-7">
                 <p
                   className={cn(
                     "inline-flex rounded-full px-2.5 py-1 text-[11.5px] font-bold tracking-[0.08em] uppercase",
@@ -96,13 +124,13 @@ export function Reporting() {
                 >
                   {c.label}
                 </p>
-                <p className="mt-3 font-display text-[21px] font-bold text-deep">{c.title}</p>
+                <h3 className="mt-3 font-display text-[22px] font-bold text-deep">{c.title}</h3>
                 <p className="mt-1.5 text-[15px] leading-relaxed text-muted">{c.detail}</p>
               </div>
             ))}
           </div>
+          <UpdateCard />
         </div>
-        <UpdateCard />
       </Container>
     </section>
   );

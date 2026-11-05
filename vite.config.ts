@@ -4,7 +4,19 @@ import react from "@vitejs/plugin-react";
 import { defineConfig, loadEnv, type Plugin } from "vite";
 import { devContactApi } from "./server/dev-contact.ts";
 
-const ROUTES = ["/", "/contact"];
+// Live pages for sitemap.xml (keep in sync with livePaths in src/lib/site.ts)
+const ROUTES = [
+  "/",
+  "/marketplace-management",
+  "/order-processing",
+  "/paid-ads",
+  "/ai-automation",
+  "/website-development",
+  "/marketing",
+  "/virtual-assistant",
+  "/our-process",
+  "/contact",
+];
 
 /** Writes robots.txt and sitemap.xml into the build, using VITE_SITE_URL. */
 function seoFiles(siteUrl: string): Plugin {

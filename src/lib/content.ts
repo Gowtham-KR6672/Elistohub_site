@@ -1,10 +1,9 @@
 import type { IconName } from "@/components/icons";
+import { servicePages } from "@/lib/site";
 
-export const announcement = [
-  "Your ecommerce growth & support partner",
-  "15+ years in ecommerce",
-  "Weekly updates + monthly reports",
-];
+export const announcement = ["Expert ecommerce team", "Weekly updates + monthly reports"];
+
+export const heroChecks = ["Expert team across every channel", "Clients worldwide: US, UK, Canada, Europe & Asia"];
 
 export const heroFeed = [
   { code: "AZ", title: "Amazon listings optimized", detail: "New titles, bullets & A+ content live", status: "Done", tone: "green" },
@@ -31,6 +30,87 @@ export const marketplaces = [
   "Facebook Shop",
   "Instagram Shop",
   "Google Shopping",
+];
+
+/** The 7 service cards on the home page; each links to its own page. */
+export type HomeService = {
+  slug: string;
+  number: string;
+  title: string;
+  description: string;
+  points: string[];
+  cta: string;
+  badge?: string;
+  tone?: "dark" | "sun";
+};
+
+export const homeServices: HomeService[] = [
+  {
+    slug: "marketplace-management",
+    number: "01",
+    title: "D2C & B2B Marketplace Management",
+    description:
+      "Amazon, Walmart, Etsy, Faire, Wayfair and more, for direct-to-consumer and wholesale. Listings, catalog and A+ content included.",
+    points: ["Amazon & D2C marketplaces", "Faire & B2B wholesale", "Listings, SEO & catalog"],
+    cta: "Learn more",
+  },
+  {
+    slug: "order-processing",
+    number: "02",
+    title: "Order Processing",
+    description: "Orders out the door on time, stock that matches the warehouse, and reorders sent before you run out.",
+    points: ["Orders, 3PL & returns", "Inventory & forecasting", "POs & suppliers"],
+    cta: "Learn more",
+  },
+  {
+    slug: "paid-ads",
+    number: "03",
+    title: "Paid Ads, on Commission",
+    description:
+      "Amazon PPC, Walmart Connect, Meta and Google Shopping. Bids tuned weekly. We only charge when we get you sales.",
+    points: ["Amazon & marketplace PPC", "Meta & Google ads", "Weekly optimisation"],
+    cta: "Learn more",
+    badge: "Performance-based",
+    tone: "dark",
+  },
+  {
+    slug: "ai-automation",
+    number: "04",
+    title: "AI Agents & Automation",
+    description:
+      "AI agents that answer customers at 3am, studio-quality product images without a studio, and automations that clear the busywork.",
+    points: ["AI support agents", "AI product images", "Workflow automation"],
+    cta: "Learn more",
+  },
+  {
+    slug: "website-development",
+    number: "05",
+    title: "Website Design & Development",
+    description:
+      "Shopify and WooCommerce stores designed, built, sped up and looked after, with updates whenever you need them.",
+    points: ["Store design & build", "Speed & CRO fixes", "Ongoing maintenance"],
+    cta: "Learn more",
+  },
+  {
+    slug: "marketing",
+    number: "06",
+    title: "Marketing",
+    description:
+      "Emails and texts people actually open, plus Instagram and Facebook posts that sound like you. One plan, every inbox and feed.",
+    points: ["Email & SMS campaigns", "Instagram & Facebook", "Content calendars"],
+    cta: "Learn more",
+  },
+  {
+    slug: "virtual-assistant",
+    number: "07",
+    title: "Ecommerce Virtual Assistant",
+    description:
+      "Need help now and then, not a full team? Book an ecommerce-trained VA by the hour and pay only for the work you need done. No long-term contract.",
+    points: ["Pay by the hour", "Flexible monthly hours", "Cancel anytime"],
+    cta: "See how it works",
+    badge: "Pay as you go",
+    tone: "sun",
+  },
 ];
 
 export type Service = {
@@ -117,6 +197,32 @@ export const services: Service[] = [
     badge: "Performance-based",
   },
 ];
+
+const serviceByTitle = (title: string) => {
+  const service = services.find((s) => s.title === title);
+  if (!service) throw new Error(`Unknown service: ${title}`);
+  return { ...service, variant: undefined };
+};
+
+/** Cards on the D2C & B2B marketplace management page. */
+export const marketplaceServices: Service[] = [
+  "Amazon Account Management",
+  "Multichannel Marketplace Management",
+  "Product Listing Services",
+  "Listing Optimization & Marketplace SEO",
+  "Image Editing & Enhanced Content",
+  "Catalog & PIM Management",
+].map(serviceByTitle);
+
+/** Cards on the Order processing page. */
+export const orderServices: Service[] = [
+  "Order Management & Fulfilment",
+  "Inventory Management & Forecasting",
+  "Purchase Orders & Vendor Management",
+].map(serviceByTitle);
+
+export const ppcService: Service = { ...serviceByTitle("PPC & Paid Ads Management"), variant: "dark" };
+export const socialService: Service = serviceByTitle("Social Media Management");
 
 export const webPlatforms = [
   { name: "Shopify & Shopify Plus", detail: "Themes, apps, checkout & Markets" },
@@ -366,19 +472,8 @@ export const faqs = [
   },
 ];
 
-export const contactNeeds = [
-  "Marketplace management",
-  "Listings & catalog",
-  "Inventory, orders & vendors",
-  "Paid ads (commission-based)",
-  "AI product images",
-  "Social media",
-  "Customer service",
-  "Email & SMS marketing",
-  "AI support & automation",
-  "Website build or updates",
-  "Honestly? All of it",
-];
+/** Options for "What can we take off your plate?". Keep in sync with public/api/contact.php and server/contact-handler.mjs. */
+export const contactNeeds = [...servicePages.map((page) => page.need), "Honestly? All of it"];
 
 export const contactPerks = ["Weekly updates and monthly reporting", "Teams covering US, UK, EU & IST hours"];
 
@@ -386,33 +481,84 @@ export const footerColumns = [
   {
     title: "Services",
     links: [
-      { label: "Amazon account management", href: "/services" },
-      { label: "Product listing services", href: "/services" },
-      { label: "Inventory management", href: "/services" },
-      { label: "Order management", href: "/services" },
-      { label: "PPC management", href: "/services" },
-      { label: "Social media management", href: "/services" },
-      { label: "Customer service outsourcing", href: "/services" },
-      { label: "Klaviyo email marketing", href: "/services" },
+      { label: "D2C & B2B marketplace management", href: "/marketplace-management" },
+      { label: "Listings, catalog & content", href: "/marketplace-management" },
+      { label: "Order processing", href: "/order-processing" },
+      { label: "Paid ads on commission", href: "/paid-ads" },
+      { label: "Marketing", href: "/marketing" },
+      { label: "Virtual assistant", href: "/virtual-assistant" },
+      { label: "Our process", href: "/our-process" },
     ],
   },
   {
     title: "Marketplaces",
     links: ["Amazon", "Walmart", "Etsy", "eBay", "Faire", "Wayfair"].map((label) => ({
       label,
-      href: "/marketplaces",
+      href: "/marketplace-management",
     })),
   },
   {
     title: "Websites & AI",
     links: [
-      { label: "Shopify development", href: "/websites" },
-      { label: "Website maintenance", href: "/websites" },
-      { label: "Website updates", href: "/websites" },
-      { label: "AI customer support", href: "/ai" },
-      { label: "AI automations", href: "/ai" },
-      { label: "AI agents", href: "/ai" },
-      { label: "AI product images", href: "/ai" },
+      { label: "Shopify development", href: "/website-development" },
+      { label: "Website maintenance", href: "/website-development" },
+      { label: "AI customer support", href: "/ai-automation" },
+      { label: "AI automations", href: "/ai-automation" },
+      { label: "AI product images", href: "/ai-automation#ai-images" },
+      { label: "Customer service", href: "/ai-automation#customer-service" },
     ],
+  },
+];
+
+/* ---------- Virtual assistant page ---------- */
+
+export const vaPlans = [
+  {
+    label: "Off and on",
+    title: "Pay as you go",
+    description: "Book hours only when something comes up. You pay for the time logged, nothing more.",
+    points: ["Billed by the hour", "No minimum each month", "Same VA when they’re available"],
+  },
+  {
+    label: "Most popular",
+    title: "Monthly hours",
+    description: "A set number of hours each month at a lower hourly rate. Change the hours whenever you like.",
+    points: ["Pick your monthly hours", "Unused hours roll over for a month", "A regular VA who learns your store"],
+    featured: true,
+  },
+  {
+    label: "Part-time or full-time",
+    title: "Dedicated VA",
+    description: "Your own assistant on a fixed schedule, working in your time zone.",
+    points: ["Part-time or full-time", "US, UK, EU or IST hours", "Managed by our senior team"],
+  },
+];
+
+export const vaTasks = [
+  "Listing uploads & product updates",
+  "Order updates, tracking & returns",
+  "Customer emails & marketplace messages",
+  "Data entry & spreadsheet clean-up",
+  "Competitor & product research",
+  "Social media scheduling",
+  "Supplier follow-ups",
+  "Inbox & calendar admin",
+];
+
+export const vaSteps = [
+  { title: "Tell us the tasks", detail: "A quick call or a message with what you need done." },
+  { title: "Get matched", detail: "We pair you with a VA who knows your platforms." },
+  { title: "Pay for hours used", detail: "Simple time logs and a clear invoice. Pause anytime." },
+];
+
+/* ---------- Our process page ---------- */
+
+export const processSteps = [
+  { title: "Free 30-minute call", detail: "We look at your store and channels and tell you honestly where we’d start." },
+  { title: "Plan & scope", detail: "You get a clear list of what we’ll take off your plate, in what order." },
+  { title: "Plug into your setup", detail: "We work inside your tools and talk wherever you’re comfortable. No new apps." },
+  {
+    title: "Weekly updates, monthly reports",
+    detail: "What we shipped, what’s next and what needs your call, plus a full monthly report.",
   },
 ];

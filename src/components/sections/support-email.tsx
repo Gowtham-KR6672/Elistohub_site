@@ -78,19 +78,24 @@ export function CustomerService() {
   );
 }
 
-export function EmailMarketing() {
+/** `headerless`: hide the headline and intro when the page hero already shows them. */
+export function EmailMarketing({ headerless = false }: { headerless?: boolean }) {
   return (
     <section id="email" className="bg-off py-24 sm:py-32">
       <Container className="grid items-center gap-14 lg:grid-cols-2 lg:gap-20">
         <div className="reveal lg:order-2">
           <Eyebrow>Email &amp; SMS marketing</Eyebrow>
-          <h2 className={cn(headingXL, "mt-5 text-deep")}>
-            Emails people actually open. <Highlight>Wild, we know.</Highlight>
-          </h2>
-          <p className="mt-6 text-lg leading-relaxed text-muted">
-            Klaviyo email marketing, SMS campaigns and automated flows - designed, written, built and tested by our
-            team, so your list makes money while you sleep.
-          </p>
+          {headerless ? null : (
+            <>
+              <h2 className={cn(headingXL, "mt-5 text-deep")}>
+                Emails people actually open. <Highlight>Wild, we know.</Highlight>
+              </h2>
+              <p className="mt-6 text-lg leading-relaxed text-muted">
+                Klaviyo email marketing, SMS campaigns and automated flows - designed, written, built and tested by our
+                team, so your list makes money while you sleep.
+              </p>
+            </>
+          )}
           <ul className="mt-9 grid gap-x-6 gap-y-4 sm:grid-cols-2">
             {emailPoints.map((p) => (
               <CheckItem key={p}>{p}</CheckItem>

@@ -40,7 +40,7 @@ function Field({
   );
 }
 
-function Form({ onReset }: { onReset: () => void }) {
+function Form({ onReset, defaultNeed }: { onReset: () => void; defaultNeed?: string }) {
   const [state, formAction, pending] = useActionState(submitContact, initialState);
 
   if (state.status === "success") {
@@ -127,7 +127,7 @@ function Form({ onReset }: { onReset: () => void }) {
           <select
             id="contact-need"
             name="need"
-            defaultValue={values?.need ?? contactNeeds[0]}
+            defaultValue={values?.need ?? (defaultNeed && contactNeeds.includes(defaultNeed) ? defaultNeed : contactNeeds[0])}
             aria-invalid={errors?.need ? true : undefined}
             className={cn(inputClass, "min-h-13 appearance-none pr-11")}
           >
@@ -198,7 +198,7 @@ function Form({ onReset }: { onReset: () => void }) {
   );
 }
 
-export function ContactForm() {
+export function ContactForm({ defaultNeed }: { defaultNeed?: string }) {
   const [formKey, setFormKey] = useState(0);
-  return <Form key={formKey} onReset={() => setFormKey((k) => k + 1)} />;
+  return <Form key={formKey} defaultNeed={defaultNeed} onReset={() => setFormKey((k) => k + 1)} />;
 }

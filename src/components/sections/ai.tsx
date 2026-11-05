@@ -60,7 +60,8 @@ function ChatDemo() {
   );
 }
 
-export function AiSection() {
+/** `headerless`: hide the eyebrow, headline and intro when the page hero already shows them. */
+export function AiSection({ headerless = false }: { headerless?: boolean }) {
   return (
     <section id="ai" className="relative isolate overflow-hidden bg-deep py-24 text-white sm:py-32">
       <div className="pointer-events-none absolute inset-0 -z-10" aria-hidden="true">
@@ -71,16 +72,20 @@ export function AiSection() {
 
       <Container className="grid items-center gap-16 lg:grid-cols-[1.1fr_0.9fr]">
         <div className="reveal">
-          <Eyebrow tone="dark">AI customer support &amp; automation</Eyebrow>
-          <h2 className={cn(headingXL, "mt-5 text-white")}>
-            AI that answers your customers at 3am. <span className="text-sun">So you don’t have to.</span>
-          </h2>
-          <p className="mt-6 max-w-xl text-lg leading-relaxed text-frost">
-            We set up, train and manage AI for ecommerce - chatbots, email support, automations and custom AI agents
-            that take the repetitive work off your plate.
-          </p>
+          {headerless ? null : (
+            <>
+              <Eyebrow tone="dark">AI customer support &amp; automation</Eyebrow>
+              <h2 className={cn(headingXL, "mt-5 text-white")}>
+                AI that answers your customers at 3am. <span className="text-sun">So you don’t have to.</span>
+              </h2>
+              <p className="mt-6 max-w-xl text-lg leading-relaxed text-frost">
+                We set up, train and manage AI for ecommerce - chatbots, email support, automations and custom AI agents
+                that take the repetitive work off your plate.
+              </p>
+            </>
+          )}
 
-          <ul className="mt-10 grid gap-3 sm:grid-cols-2">
+          <ul className={cn("grid gap-3 sm:grid-cols-2", !headerless && "mt-10")}>
             {aiFeatures.map((f) => (
               <li
                 key={f.title}

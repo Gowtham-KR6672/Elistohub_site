@@ -71,21 +71,25 @@ function MaintainPanel() {
   );
 }
 
-export function Websites() {
+/** `headerless`: hide the section headline when the page hero already shows it. */
+export function Websites({ headerless = false }: { headerless?: boolean }) {
   return (
     <section id="websites" className="bg-off py-24 sm:py-32">
       <Container>
-        <SectionHeader
-          eyebrow="Ecommerce website development"
-          title={
-            <>
-              Websites we build, fix &amp; <Highlight>lovingly babysit.</Highlight>
-            </>
-          }
-          intro="New store, slow store or “can you just change this one thing” store - our web team has you covered."
-        />
+        {headerless ? null : (
+          <SectionHeader
+            className="mb-14"
+            eyebrow="Ecommerce website development"
+            title={
+              <>
+                Websites we build, fix &amp; <Highlight>lovingly babysit.</Highlight>
+              </>
+            }
+            intro="New store, slow store or “can you just change this one thing” store - our web team has you covered."
+          />
+        )}
 
-        <ul className="mt-14 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {webPlatforms.map((p) => (
             <li
               key={p.name}

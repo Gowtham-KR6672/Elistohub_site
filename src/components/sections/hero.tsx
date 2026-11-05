@@ -3,7 +3,7 @@ import type { CSSProperties } from "react";
 import { Icon } from "@/components/icons";
 import { ButtonLink, CheckItem, Container, Highlight } from "@/components/ui";
 import { cn } from "@/lib/cn";
-import { heroFeed } from "@/lib/content";
+import { heroChecks, heroFeed } from "@/lib/content";
 
 function YearsBadge() {
   return (
@@ -142,8 +142,9 @@ export function Hero() {
           </div>
 
           <ul className="mt-11 flex flex-wrap gap-x-7 gap-y-3 text-[15px] text-muted">
-            <CheckItem>15+ years in ecommerce</CheckItem>
-            <CheckItem>Clients worldwide: US, UK, Canada, Europe &amp; Asia</CheckItem>
+            {heroChecks.map((check) => (
+              <CheckItem key={check}>{check}</CheckItem>
+            ))}
           </ul>
         </div>
 

@@ -10,13 +10,24 @@ through **Brevo**. The same code deploys two ways:
 
 ## Pages
 
-| Route | Status |
+| Route | Page |
 | --- | --- |
-| `/` | Live: full home page |
-| `/contact` | Live: contact form + FAQ |
-| `/services`, `/marketplaces`, `/websites`, `/ai`, `/case-studies`, `/privacy`, `/terms` | Coming soon |
+| `/` | Home: hero, marketplaces, 7 service cards, case studies, FAQ, contact |
+| `/marketplace-management` | D2C & B2B marketplace management |
+| `/order-processing` | Order processing |
+| `/paid-ads` | Paid ads on commission |
+| `/ai-automation` | AI agents & automation (AI support, AI product images, customer service) |
+| `/website-development` | Website design & development |
+| `/marketing` | Marketing: email, SMS & social |
+| `/virtual-assistant` | Ecommerce virtual assistant |
+| `/our-process` | Our process + tools & reporting |
+| `/contact` | Contact form + FAQ |
+| `/privacy`, `/terms` | Coming soon |
 
-Coming-soon pages are listed in `src/lib/site.ts` (`comingSoonPages`) and routed in `src/App.tsx`.
+Service pages are listed in `src/lib/site.ts` (`servicePages`, which also drives the Services menu) and routed in
+`src/App.tsx`. Old addresses keep working: `legacyPathRedirects` (e.g. `/websites`) and `legacyHashRedirects`
+(e.g. `/#ai`, `/#email`) in `src/lib/site.ts` forward them to the new pages. When you add a page, also add it to
+`ROUTES` in `vite.config.ts` for the sitemap.
 
 ## Local development
 

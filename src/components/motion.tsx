@@ -44,46 +44,64 @@ export function InView({
   );
 }
 
-/** Counts up to `value` the first time it scrolls into view. Renders the final value on the server. */
-export function CountUp({ value, prefix = "", suffix = "" }: { value: number; prefix?: string; suffix?: string }) {
+/**
+ * Counts up to `value` the first time it scrolls into view.
+ *
+ * The real number is shown until counting actually starts (so it is never stuck at 0 if the
+ * observer or animation frames don't fire, e.g. during momentum scrolling on phones), and a
+ * timer always finishes on the final value.
+ */
+export function CountUp({
+  value,
+  prefix = "",
+  suffix = "",
+  duration = 1400,
+}: {
+  value: number;
+  prefix?: string;
+  suffix?: string;
+  duration?: number;
+}) {
   const ref = useRef<HTMLSpanElement>(null);
   const [display, setDisplay] = useState(value);
 
   useEffect(() => {
     const el = ref.current;
-    if (!el || prefersReducedMotion()) return;
-    const run = { raf: 0, first: true };
+    if (!el || prefersReducedMotion() || typeof IntersectionObserver === "undefined") return;
+
+    const run = { raf: 0, timer: 0, started: false };
+
     const io = new IntersectionObserver(
-      ([entry]) => {
-        if (run.first) {
-          run.first = false;
-          // Already on screen when the page loaded: keep the final number.
-          if (entry.isIntersecting) {
-            io.disconnect();
-            return;
-          }
-          setDisplay(0);
-          return;
-        }
-        if (!entry.isIntersecting) return;
+      (entries) => {
+        if (run.started || !entries.some((entry) => entry.isIntersecting)) return;
+        run.started = true;
         io.disconnect();
-        const start = performance.now();
-        const duration = 1400;
+
+        const startedAt = performance.now();
         const tick = (now: number) => {
-          const p = Math.min(1, (now - start) / duration);
+          const p = Math.min(1, Math.max(0, (now - startedAt) / duration));
           setDisplay(Math.round(value * (1 - Math.pow(1 - p, 3))));
           if (p < 1) run.raf = requestAnimationFrame(tick);
         };
+        setDisplay(0);
         run.raf = requestAnimationFrame(tick);
+        // Safety net: land on the real number even if animation frames are paused or throttled.
+        run.timer = window.setTimeout(() => {
+          cancelAnimationFrame(run.raf);
+          setDisplay(value);
+        }, duration + 300);
       },
-      { threshold: 0.6 },
+      { threshold: 0, rootMargin: "0px 0px -10% 0px" },
     );
     io.observe(el);
+
     return () => {
       io.disconnect();
       cancelAnimationFrame(run.raf);
+      window.clearTimeout(run.timer);
+      setDisplay(value);
     };
-  }, [value]);
+  }, [value, duration]);
 
   return (
     <span ref={ref} className="tabular-nums">

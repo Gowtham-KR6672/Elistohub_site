@@ -5,7 +5,16 @@ import { cn } from "@/lib/cn";
 import { contactPerks } from "@/lib/content";
 import { siteConfig } from "@/lib/site";
 
-export function ContactSection({ as: Heading = "h2", id = "contact" }: { as?: "h1" | "h2"; id?: string }) {
+export function ContactSection({
+  as: Heading = "h2",
+  id = "contact",
+  defaultNeed,
+}: {
+  as?: "h1" | "h2";
+  id?: string;
+  /** Preselects this option in "What can we take off your plate?" */
+  defaultNeed?: string;
+}) {
   return (
     <section id={id} className="py-16 sm:py-24">
       <Container>
@@ -51,7 +60,7 @@ export function ContactSection({ as: Heading = "h2", id = "contact" }: { as?: "h
             </div>
 
             <div className="w-full rounded-[30px] bg-white p-6 text-ink shadow-[0_40px_80px_-30px_rgba(0,0,0,0.5)] sm:p-9 lg:ml-auto lg:max-w-[760px]">
-              <ContactForm />
+              <ContactForm defaultNeed={defaultNeed} />
             </div>
           </div>
         </div>

@@ -123,6 +123,7 @@ const paths = {
     </>
   ),
   drag: <path d="m9 7-5 5 5 5M15 7l5 5-5 5" />,
+  chevron: <path d="m6 9 6 6 6-6" />,
   send: <path d="M5 12h14M13 6l6 6-6 6" />,
   inbox: (
     <>

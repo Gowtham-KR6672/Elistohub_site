@@ -10,16 +10,13 @@
  */
 
 export const CONTACT_NEEDS = [
-  "Marketplace management",
-  "Listings & catalog",
-  "Inventory, orders & vendors",
+  "D2C & B2B marketplace management",
+  "Order processing",
   "Paid ads (commission-based)",
-  "AI product images",
-  "Social media",
-  "Customer service",
-  "Email & SMS marketing",
-  "AI support & automation",
-  "Website build or updates",
+  "AI agents & automation",
+  "Website design & development",
+  "Marketing (email, SMS & social)",
+  "Virtual assistant (pay as you go)",
   "Honestly? All of it",
 ];
 
