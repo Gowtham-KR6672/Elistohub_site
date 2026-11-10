@@ -36,16 +36,6 @@
   padding-inline: var(--gutter);
 }
 
-/* Header shell sits 1rem outside the content edge so the logo lines up with page content */
-@utility header-shell {
-  padding-inline: max(0.75rem, calc(var(--gutter) - 1rem));
-}
-
-@utility header-pill {
-  max-width: calc(var(--page-max) - 2 * var(--gutter) + 2rem);
-  margin-inline: auto;
-}
-
 @theme inline {
   --color-deep: var(--deep-green);
   --color-deep-2: var(--deep-green-2);
@@ -74,6 +64,7 @@
   --animate-feed-in: feed-in 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) both;
   --animate-fade-up: fade-up 0.8s cubic-bezier(0.2, 0.7, 0.2, 1) both;
   --animate-menu-in: menu-in 0.25s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  --animate-fade-in: fade-in 0.25s ease-out both;
 
   @keyframes marquee {
     from {
@@ -120,6 +111,11 @@
     to {
       opacity: 1;
       transform: none;
+    }
+  }
+  @keyframes fade-in {
+    from {
+      opacity: 0;
     }
   }
 }
