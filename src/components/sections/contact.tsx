@@ -1,5 +1,4 @@
 import { ContactForm } from "@/components/contact-form";
-import { Icon } from "@/components/icons";
 import { CheckItem, Container } from "@/components/ui";
 import { cn } from "@/lib/cn";
 import { contactPerks } from "@/lib/content";
@@ -32,10 +31,10 @@ export function ContactSection({
                   "font-display text-[clamp(2.5rem,5.2vw,4.4rem)] leading-[0.98] font-extrabold tracking-[-0.045em]",
                 )}
               >
-                Ready to stop doing <span className="text-sun">all the things?</span>
+                Get a free review <span className="text-sun">of your store.</span>
               </Heading>
               <p className="mt-6 max-w-[460px] text-lg leading-relaxed text-frost">
-                Book a free 30-minute call. We’ll look at your store and tell you honestly where we’d start.
+                Tell us where you sell. We’ll show you the quick wins we’d go after first and what it would cost.
               </p>
               <ul className="mt-9 flex flex-col gap-4 text-[16px]">
                 {contactPerks.map((perk) => (
@@ -53,10 +52,6 @@ export function ContactSection({
                   </a>
                 </CheckItem>
               </ul>
-              <div className="mt-10 hidden items-center gap-3 text-sm text-frost/80 lg:flex">
-                <Icon name="pin" size={18} className="text-mint" />
-                {siteConfig.location} · Working across US, UK, EU &amp; IST hours
-              </div>
             </div>
 
             <div className="w-full rounded-[30px] bg-white p-6 text-ink shadow-[0_40px_80px_-30px_rgba(0,0,0,0.5)] sm:p-9 lg:ml-auto lg:max-w-[760px]">

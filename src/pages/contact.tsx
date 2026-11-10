@@ -7,7 +7,7 @@ export default function ContactPage() {
     <>
       <Seo
         title="Contact"
-        description="Book a free 30-minute call with Elistohub. We’ll look at your store and tell you honestly where we’d start."
+        description="Get a free review of your store. Tell us where you sell and we’ll show you the quick wins we’d go after first and what it would cost."
         path="/contact"
       />
       <ContactSection as="h1" id="contact-form" />

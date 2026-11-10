@@ -2,27 +2,32 @@ import type { ReactNode } from "react";
 import { Link } from "react-router";
 import { Icon } from "@/components/icons";
 import { ButtonLink, Container, Eyebrow } from "@/components/ui";
+import { cn } from "@/lib/cn";
 
-type Crumb = { label: string; href?: string };
+export type Crumb = { label: string; href?: string };
 
 /**
- * Short hero at the top of every service page: breadcrumb, eyebrow, the page's single H1,
- * a one-paragraph intro and a "Book a call" button that scrolls to the contact form.
+ * Short hero at the top of every inner page: breadcrumb, eyebrow, the page's single H1,
+ * a one-paragraph intro, a "Book a free call" button (scrolls to the contact form) and an optional second link.
  */
 export function PageHero({
   crumbs,
   eyebrow,
+  badge,
   title,
   intro,
-  ctaLabel = "Book a strategy call",
-  aside,
+  ctaLabel = "Book a free call",
+  secondary,
 }: {
   crumbs: Crumb[];
   eyebrow: string;
+  /** Short code shown before the eyebrow, e.g. "AZ" on the Amazon page. */
+  badge?: string;
   title: ReactNode;
   intro: string;
-  ctaLabel?: string;
-  aside?: ReactNode;
+  /** Pass null to hide the button. */
+  ctaLabel?: string | null;
+  secondary?: { label: string; href: string; external?: boolean };
 }) {
   return (
     <section className="relative isolate -mt-[72px] overflow-hidden pt-[72px]">
@@ -54,22 +59,49 @@ export function PageHero({
 
         <div className="mt-10 grid items-end gap-10 lg:grid-cols-[1.4fr_1fr] lg:gap-16">
           <div className="animate-fade-up [animation-delay:80ms]">
-            <Eyebrow>{eyebrow}</Eyebrow>
+            <div className="flex flex-wrap items-center gap-3">
+              {badge ? (
+                <span className="grid h-10 min-w-10 place-items-center rounded-xl bg-deep px-2 font-display text-[15px] font-extrabold text-sun">
+                  {badge}
+                </span>
+              ) : null}
+              <Eyebrow>{eyebrow}</Eyebrow>
+            </div>
             <h1 className="mt-6 font-display text-[clamp(2.4rem,5.4vw,5rem)] leading-[1] font-extrabold tracking-[-0.045em] text-deep">
               {title}
             </h1>
           </div>
           <div className="animate-fade-up [animation-delay:160ms] lg:pb-2">
             <p className="text-lg leading-relaxed text-muted">{intro}</p>
-            <div className="mt-8 flex flex-wrap gap-3">
-              <ButtonLink href="#contact" size="lg" arrow>
-                {ctaLabel}
-              </ButtonLink>
-              <ButtonLink href="/#services" size="lg" variant="outline">
-                All services
-              </ButtonLink>
-            </div>
-            {aside}
+            {ctaLabel || secondary ? (
+              <div className="mt-8 flex flex-wrap items-center gap-3">
+                {ctaLabel ? (
+                  <ButtonLink href="#contact" size="lg" arrow>
+                    {ctaLabel}
+                  </ButtonLink>
+                ) : null}
+                {secondary ? (
+                  secondary.external ? (
+                    <a
+                      href={secondary.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className={cn(
+                        "group inline-flex min-h-14 items-center gap-2 rounded-full border border-line bg-white px-7 text-[17px] font-semibold whitespace-nowrap text-deep transition-colors hover:border-brand/40 hover:bg-tint",
+                      )}
+                    >
+                      {secondary.label}
+                      <Icon name="arrowUpRight" size={17} strokeWidth={2.2} className="transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+                      <span className="sr-only">(opens in a new tab)</span>
+                    </a>
+                  ) : (
+                    <ButtonLink href={secondary.href} size="lg" variant="outline">
+                      {secondary.label}
+                    </ButtonLink>
+                  )
+                ) : null}
+              </div>
+            ) : null}
           </div>
         </div>
       </Container>

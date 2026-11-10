@@ -5,21 +5,21 @@ import { ButtonLink, CheckItem, Container, Highlight } from "@/components/ui";
 import { cn } from "@/lib/cn";
 import { heroChecks, heroFeed } from "@/lib/content";
 
-function YearsBadge() {
+function ResultBadge() {
   return (
     <div className="absolute -top-10 -right-8 z-20 hidden size-[136px] sm:block" aria-hidden="true">
       <div className="relative grid size-full place-items-center rounded-full bg-sun shadow-[0_20px_40px_-16px_rgba(5,59,44,0.45)]">
         <svg viewBox="0 0 120 120" className="animate-spin-slow absolute inset-0 size-full text-deep">
           <defs>
-            <path id="years-circle" d="M60,60 m-46,0 a46,46 0 1,1 92,0 a46,46 0 1,1 -92,0" />
+            <path id="badge-circle" d="M60,60 m-46,0 a46,46 0 1,1 92,0 a46,46 0 1,1 -92,0" />
           </defs>
-          <text className="fill-current text-[9.5px] font-bold uppercase">
-            <textPath href="#years-circle" textLength="286" lengthAdjust="spacing">
-              Years in ecommerce • Years in ecommerce •
+          <text className="fill-current text-[10px] font-bold uppercase">
+            <textPath href="#badge-circle" textLength="286" lengthAdjust="spacing">
+              More orders • More orders • More orders •
             </textPath>
           </text>
         </svg>
-        <span className="font-display text-[34px] leading-none font-extrabold tracking-[-0.05em] text-deep">15+</span>
+        <span className="font-display text-[32px] leading-none font-extrabold tracking-[-0.05em] text-deep">+40%</span>
       </div>
     </div>
   );
@@ -28,7 +28,7 @@ function YearsBadge() {
 function ActivityCard() {
   return (
     <div className="relative mx-auto w-full max-w-[520px] xl:mr-0 2xl:max-w-[580px]">
-      <YearsBadge />
+      <ResultBadge />
       <div
         className="absolute -inset-6 -z-10 rounded-[40px] bg-gradient-to-br from-mint/30 via-white/0 to-sun/30 blur-2xl"
         aria-hidden="true"
@@ -114,30 +114,29 @@ export function Hero() {
       <Container className="grid items-center gap-16 pt-12 pb-24 xl:grid-cols-[1.2fr_0.8fr] xl:gap-12 lg:pt-20 lg:pb-32">
         <div className="animate-fade-up">
           <Link
-            to="/#ai"
+            to="/virtual-assistant"
             className="group inline-flex items-center gap-3 rounded-full border border-brand/15 bg-white/80 p-1 pr-4 text-sm font-semibold text-deep shadow-sm backdrop-blur transition-colors hover:border-brand/40"
           >
             <span className="rounded-full bg-brand px-2.5 py-1 text-xs tracking-wide text-white">NEW</span>
-            AI customer support is here
+            Pay-as-you-go ecommerce VAs
             <Icon name="arrow" size={16} className="text-brand transition-transform group-hover:translate-x-0.5" />
           </Link>
 
-          <h1 className="mt-7 font-display text-[clamp(2.5rem,6.2vw,6.5rem)] leading-[0.98] font-extrabold tracking-[-0.05em] text-deep">
-            We run the grind. <br className="hidden sm:block" />
-            <Highlight onLoad>You run the show.</Highlight>
+          <h1 className="mt-7 font-display text-[clamp(2.5rem,5.4vw,5.4rem)] leading-[0.98] font-extrabold tracking-[-0.05em] text-deep">
+            More sales on every channel. <Highlight onLoad>Less work on your plate.</Highlight>
           </h1>
 
-          <p className="mt-7 max-w-[580px] text-lg leading-relaxed text-muted sm:text-[19px] 2xl:max-w-[640px] 2xl:text-[21px]">
-            Elistohub is your ecommerce growth and support partner. Marketplaces, listings, inventory, ads, AI support
-            and websites, all run by one senior team. You get the growth. We get the to-do list.
+          <p className="mt-7 max-w-[600px] text-lg leading-relaxed text-muted sm:text-[19px] 2xl:max-w-[660px] 2xl:text-[21px]">
+            We run the day-to-day of your online store: marketplaces, listings, orders, ads, AI support, websites and
+            marketing. You get more orders, cleaner operations and a team that owns the results.
           </p>
 
           <div className="mt-10 flex flex-wrap gap-3.5">
             <ButtonLink href="/#contact" size="lg" arrow>
-              Book a strategy call
+              Book a free call
             </ButtonLink>
-            <ButtonLink href="/#services" size="lg" variant="yellow">
-              Explore services
+            <ButtonLink href="/#results" size="lg" variant="yellow">
+              See our results
             </ButtonLink>
           </div>
 

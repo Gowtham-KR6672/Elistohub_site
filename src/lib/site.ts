@@ -4,11 +4,12 @@ export const siteConfig = {
   name: "Elistohub",
   title: "Elistohub - Ecommerce Outsourcing Agency",
   description:
-    "Elistohub is your ecommerce growth and support partner. Marketplaces, listings, inventory, ads, AI support and websites, all run by one senior team.",
+    "We run the day-to-day of your online store: marketplaces, listings, orders, ads, AI support, websites and marketing. More orders, cleaner operations and a team that owns the results.",
   /** Public site URL, e.g. https://www.elistohub.com (set VITE_SITE_URL at build time). */
   url: ((import.meta.env.VITE_SITE_URL as string | undefined) ?? "").replace(/\/$/, ""),
-  email: "hello@elistohub.com",
+  email: "info@elistohub.com",
   location: "Mumbai, India",
+  tagline: "One team for all your ecommerce needs.",
   copyrightYear: 2026,
 } as const;
 
@@ -29,10 +30,10 @@ export const servicePages: ServicePage[] = [
   {
     slug: "marketplace-management",
     path: "/marketplace-management",
-    name: "D2C & B2B marketplace management",
+    name: "Marketplace management",
     short: "Amazon, Walmart, Etsy, Faire & more",
     icon: "grid",
-    need: "D2C & B2B marketplace management",
+    need: "Marketplace management",
   },
   {
     slug: "order-processing",
@@ -45,8 +46,8 @@ export const servicePages: ServicePage[] = [
   {
     slug: "paid-ads",
     path: "/paid-ads",
-    name: "Paid ads on commission",
-    short: "Amazon PPC, Meta & Google Shopping",
+    name: "Paid ads",
+    short: "Commission-based PPC, Meta & Google",
     icon: "megaphone",
     need: "Paid ads (commission-based)",
   },
@@ -89,19 +90,62 @@ export const servicePageBySlug = Object.fromEntries(servicePages.map((page) => [
   ServicePage
 >;
 
-export type NavItem = { label: string; href: string; children?: ServicePage[] };
+export type MarketplacePage = {
+  slug: string;
+  path: string;
+  name: string;
+  /** Two-letter badge used in menus and cards, e.g. "AZ". */
+  code: string;
+};
+
+export const marketplacePages: MarketplacePage[] = [
+  { slug: "amazon", name: "Amazon", code: "AZ" },
+  { slug: "walmart", name: "Walmart", code: "WM" },
+  { slug: "etsy", name: "Etsy", code: "ET" },
+  { slug: "ebay", name: "eBay", code: "EB" },
+  { slug: "faire", name: "Faire", code: "FA" },
+  { slug: "wayfair", name: "Wayfair", code: "WF" },
+  { slug: "target-plus", name: "Target Plus", code: "T+" },
+  { slug: "home-depot", name: "The Home Depot", code: "HD" },
+].map((m) => ({ ...m, path: `/marketplaces/${m.slug}` }));
+
+export const marketplaceByName = Object.fromEntries(marketplacePages.map((m) => [m.name, m])) as Record<
+  string,
+  MarketplacePage
+>;
+
+/** An item inside a header dropdown. */
+export type MenuLink = { path: string; name: string; short?: string; icon?: IconName; code?: string };
+
+export type NavItem = {
+  label: string;
+  href: string;
+  children?: MenuLink[];
+  /** Link shown at the bottom of a dropdown. */
+  allLink?: { label: string; href: string; note: string };
+};
 
 export const mainNav: NavItem[] = [
-  { label: "Services", href: "/#services", children: servicePages },
-  { label: "Marketplaces", href: "/marketplace-management" },
-  { label: "AI", href: "/ai-automation" },
+  {
+    label: "Services",
+    href: "/#services",
+    children: [
+      ...servicePages,
+      { path: "/our-process", name: "Our process", short: "How we work, step by step", icon: "spark" },
+    ],
+    allLink: { label: "See all services", href: "/#services", note: "Pick one service or hand us the whole back office." },
+  },
+  {
+    label: "Marketplaces",
+    href: "/marketplace-management",
+    children: marketplacePages,
+    allLink: { label: "All marketplaces", href: "/marketplace-management", note: "D2C marketplaces and B2B wholesale." },
+  },
+  { label: "Results", href: "/#results" },
   { label: "Our process", href: "/our-process" },
-  { label: "Case studies", href: "/#work" },
+  { label: "About", href: "/about" },
   { label: "FAQ", href: "/#faq" },
 ];
-
-/** Every live page, used for the sitemap (see vite.config.ts) and internal checks. */
-export const livePaths = ["/", ...servicePages.map((page) => page.path), "/our-process", "/contact"];
 
 /**
  * Old addresses that moved. Page paths redirect on load; home-page #anchors
@@ -114,17 +158,18 @@ export const legacyPathRedirects: Record<string, string> = {
   "/ai": "/ai-automation",
   "/case-studies": "/#work",
   "/ai-customer-support": "/ai-automation",
-  "/ai-product-images": "/ai-automation#ai-images",
-  "/customer-service": "/ai-automation#customer-service",
+  "/ai-product-images": "/ai-automation",
+  "/customer-service": "/ai-automation",
   "/email-sms-marketing": "/marketing",
   "/process": "/our-process",
+  "/about-us": "/about",
 };
 
 export const legacyHashRedirects: Record<string, string> = {
   "#websites": "/website-development",
   "#ai": "/ai-automation",
-  "#ai-images": "/ai-automation#ai-images",
-  "#customer-service": "/ai-automation#customer-service",
+  "#ai-images": "/ai-automation",
+  "#customer-service": "/ai-automation",
   "#email": "/marketing",
   "#tools": "/our-process#tools",
   "#reporting": "/our-process#tools",

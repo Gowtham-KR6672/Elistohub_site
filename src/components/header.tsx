@@ -5,7 +5,7 @@ import { Logo } from "@/components/logo";
 import { ButtonLink } from "@/components/ui";
 import { cn } from "@/lib/cn";
 import { announcement } from "@/lib/content";
-import { mainNav, servicePages, type NavItem } from "@/lib/site";
+import { mainNav, type MenuLink, type NavItem } from "@/lib/site";
 
 export function AnnouncementBar() {
   return (
@@ -22,10 +22,34 @@ export function AnnouncementBar() {
   );
 }
 
-const servicePaths = new Set(servicePages.map((page) => page.path));
+/** Icon tile or two-letter code badge for a menu item. */
+function MenuMark({ link, small = false }: { link: MenuLink; small?: boolean }) {
+  if (link.code) {
+    return (
+      <span
+        className={cn(
+          "grid shrink-0 place-items-center rounded-xl bg-deep font-display font-extrabold text-sun transition-colors group-hover:bg-brand group-hover:text-white",
+          small ? "size-8 text-[11px]" : "size-11 text-[13px]",
+        )}
+      >
+        {link.code}
+      </span>
+    );
+  }
+  return (
+    <span
+      className={cn(
+        "grid shrink-0 place-items-center rounded-xl bg-tint text-brand transition-colors group-hover:bg-brand group-hover:text-white",
+        small ? "size-8" : "size-11",
+      )}
+    >
+      {link.icon ? <Icon name={link.icon} size={small ? 17 : 21} /> : null}
+    </span>
+  );
+}
 
-/** Desktop "Services" menu: opens on hover or click, closes on Escape, outside click or navigation. */
-function ServicesMenu({ item, active }: { item: NavItem; active: boolean }) {
+/** Desktop dropdown: opens on hover (mouse) or click, closes on Escape, outside click or navigation. */
+function NavDropdown({ item, active }: { item: NavItem; active: boolean }) {
   const [open, setOpen] = useState(false);
   const wrapperRef = useRef<HTMLDivElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
@@ -63,7 +87,6 @@ function ServicesMenu({ item, active }: { item: NavItem; active: boolean }) {
   // Hover-to-open is for real mice only (touch taps also fire "enter" events).
   // A click right after hover opened the menu keeps it open instead of toggling it shut.
   const hoverOpenedAt = useRef(0);
-
   const onPointerEnter = (e: ReactPointerEvent<HTMLDivElement>) => {
     if (e.pointerType !== "mouse") return;
     window.clearTimeout(closeTimer.current);
@@ -82,6 +105,8 @@ function ServicesMenu({ item, active }: { item: NavItem; active: boolean }) {
     }
     setOpen((v) => !v);
   };
+
+  const withCodes = item.children?.some((c) => c.code);
 
   return (
     <div
@@ -111,50 +136,58 @@ function ServicesMenu({ item, active }: { item: NavItem; active: boolean }) {
       <div
         id={panelId}
         hidden={!open}
-        className="animate-menu-in absolute top-full left-1/2 z-50 w-[680px] -translate-x-1/2 pt-3"
+        className={cn(
+          "animate-menu-in absolute top-full left-1/2 z-50 -translate-x-1/2 pt-3",
+          withCodes ? "w-[520px]" : "w-[680px]",
+        )}
       >
         <div className="overflow-hidden rounded-[28px] border border-line bg-white p-3 shadow-[0_40px_80px_-30px_rgba(10,74,48,0.45)]">
           <ul className="grid grid-cols-2 gap-1">
-            {item.children?.map((page) => (
-              <li key={page.slug}>
+            {item.children?.map((link) => (
+              <li key={link.path}>
                 <Link
-                  to={page.path}
-                  aria-current={pathname === page.path ? "page" : undefined}
+                  to={link.path}
+                  aria-current={pathname === link.path ? "page" : undefined}
                   className={cn(
                     "group flex items-center gap-3.5 rounded-2xl p-3 transition-colors hover:bg-tint",
-                    pathname === page.path && "bg-tint",
+                    pathname === link.path && "bg-tint",
                   )}
                 >
-                  <span className="grid size-11 shrink-0 place-items-center rounded-xl bg-tint text-brand transition-colors group-hover:bg-brand group-hover:text-white">
-                    <Icon name={page.icon} size={21} />
-                  </span>
+                  <MenuMark link={link} />
                   <span className="min-w-0">
-                    <span className="block text-[15px] font-semibold text-deep">{page.name}</span>
-                    <span className="block truncate text-[13px] text-muted">{page.short}</span>
+                    <span className="block text-[15px] font-semibold text-deep">{link.name}</span>
+                    {link.short ? <span className="block truncate text-[13px] text-muted">{link.short}</span> : null}
                   </span>
                 </Link>
               </li>
             ))}
           </ul>
-          <div className="mt-2 flex items-center justify-between gap-4 rounded-2xl bg-off px-4 py-3">
-            <p className="text-sm text-muted">Most clients hand us two or three services.</p>
-            <Link to={item.href} className="group inline-flex items-center gap-1.5 text-sm font-semibold text-brand">
-              See all services
-              <Icon name="arrow" size={15} className="transition-transform group-hover:translate-x-0.5" />
-            </Link>
-          </div>
+          {item.allLink ? (
+            <div className="mt-2 flex items-center justify-between gap-4 rounded-2xl bg-off px-4 py-3">
+              <p className="text-sm text-muted">{item.allLink.note}</p>
+              <Link to={item.allLink.href} className="group inline-flex shrink-0 items-center gap-1.5 text-sm font-semibold text-brand">
+                {item.allLink.label}
+                <Icon name="arrow" size={15} className="transition-transform group-hover:translate-x-0.5" />
+              </Link>
+            </div>
+          ) : null}
         </div>
       </div>
     </div>
   );
 }
 
+const dropdownItems = mainNav.filter((item) => item.children);
+const companyItems = mainNav.filter((item) => !item.children);
+
 export function Header() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
-  const [servicesOpen, setServicesOpen] = useState(false);
+  const [openGroup, setOpenGroup] = useState<string | null>(null);
   const { pathname, hash } = useLocation();
   const isActive = (href: string) => pathname === href;
+  const groupActive = (item: NavItem) =>
+    Boolean(item.children?.some((c) => c.path === pathname)) || pathname === item.href;
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24);
@@ -204,7 +237,7 @@ export function Header() {
         <nav aria-label="Primary" className="hidden items-center gap-0.5 xl:flex">
           {mainNav.map((item) =>
             item.children ? (
-              <ServicesMenu key={item.label} item={item} active={servicePaths.has(pathname)} />
+              <NavDropdown key={item.label} item={item} active={groupActive(item)} />
             ) : (
               <Link
                 key={item.href}
@@ -224,7 +257,7 @@ export function Header() {
         <div className="flex items-center gap-2">
           <div className="hidden sm:block">
             <ButtonLink href="/contact" size="sm" arrow>
-              Book a call
+              Book a free call
             </ButtonLink>
           </div>
           <button
@@ -253,17 +286,19 @@ export function Header() {
             className="animate-menu-in header-pill mt-2 max-h-[calc(100dvh-136px)] overflow-y-auto overscroll-contain rounded-[28px] border border-line bg-white p-3 shadow-[0_30px_60px_-30px_rgba(10,74,48,0.5)] xl:hidden"
           >
             <ul className="flex flex-col">
-              {mainNav.map((item, i) =>
-                item.children ? (
+              {dropdownItems.map((item) => {
+                const expanded = openGroup === item.label;
+                const groupId = `mobile-${item.label.toLowerCase()}`;
+                return (
                   <li key={item.label}>
                     <button
                       type="button"
-                      aria-expanded={servicesOpen}
-                      aria-controls="mobile-services"
-                      onClick={() => setServicesOpen((v) => !v)}
+                      aria-expanded={expanded}
+                      aria-controls={groupId}
+                      onClick={() => setOpenGroup(expanded ? null : item.label)}
                       className={cn(
                         "flex min-h-14 w-full items-center justify-between rounded-2xl px-4 text-left font-display text-xl font-bold text-deep transition-colors hover:bg-tint",
-                        (servicesOpen || servicePaths.has(pathname)) && "bg-tint",
+                        (expanded || groupActive(item)) && "bg-tint",
                       )}
                     >
                       {item.label}
@@ -271,58 +306,68 @@ export function Header() {
                         name="chevron"
                         size={20}
                         strokeWidth={2.4}
-                        className={cn("text-brand transition-transform duration-200", servicesOpen && "rotate-180")}
+                        className={cn("text-brand transition-transform duration-200", expanded && "rotate-180")}
                       />
                     </button>
-                    <ul id="mobile-services" hidden={!servicesOpen} className="mt-1 mb-2 flex flex-col gap-0.5 pl-3">
-                      {item.children.map((page) => (
-                        <li key={page.slug}>
+                    <ul
+                      id={groupId}
+                      hidden={!expanded}
+                      className={cn("mt-1 mb-2 pl-3", item.children?.some((c) => c.code) ? "grid grid-cols-2 gap-0.5" : "flex flex-col gap-0.5")}
+                    >
+                      {item.children?.map((link) => (
+                        <li key={link.path}>
                           <Link
-                            to={page.path}
+                            to={link.path}
                             onClick={close}
-                            aria-current={isActive(page.path) ? "page" : undefined}
+                            aria-current={isActive(link.path) ? "page" : undefined}
                             className={cn(
-                              "flex min-h-12 items-center gap-3 rounded-xl px-3 text-[16px] font-semibold text-deep transition-colors hover:bg-tint",
-                              isActive(page.path) && "bg-tint",
+                              "group flex min-h-12 items-center gap-3 rounded-xl px-3 text-[15px] font-semibold text-deep transition-colors hover:bg-tint",
+                              isActive(link.path) && "bg-tint",
                             )}
                           >
-                            <Icon name={page.icon} size={19} className="shrink-0 text-brand" />
-                            {page.name}
+                            <MenuMark link={link} small />
+                            {link.name}
                           </Link>
                         </li>
                       ))}
-                      <li>
-                        <Link
-                          to={item.href}
-                          onClick={close}
-                          className="flex min-h-12 items-center gap-2 rounded-xl px-3 text-[15px] font-semibold text-brand hover:bg-tint"
-                        >
-                          See all services
-                          <Icon name="arrow" size={16} />
-                        </Link>
-                      </li>
+                      {item.allLink ? (
+                        <li className="col-span-2">
+                          <Link
+                            to={item.allLink.href}
+                            onClick={close}
+                            className="flex min-h-12 items-center gap-2 rounded-xl px-3 text-[15px] font-semibold text-brand hover:bg-tint"
+                          >
+                            {item.allLink.label}
+                            <Icon name="arrow" size={16} />
+                          </Link>
+                        </li>
+                      ) : null}
                     </ul>
                   </li>
-                ) : (
-                  <li key={item.href}>
-                    <Link
-                      to={item.href}
-                      onClick={close}
-                      aria-current={isActive(item.href) ? "page" : undefined}
-                      className={cn(
-                        "flex min-h-14 items-center justify-between rounded-2xl px-4 font-display text-xl font-bold text-deep transition-colors hover:bg-tint",
-                        isActive(item.href) && "bg-tint",
-                      )}
-                    >
-                      {item.label}
-                      <span className="text-sm font-semibold text-muted/60">0{i + 1}</span>
-                    </Link>
-                  </li>
-                ),
-              )}
+                );
+              })}
+            </ul>
+
+            <p className="mt-3 px-4 text-xs font-bold tracking-[0.12em] text-muted/70 uppercase">Company</p>
+            <ul className="mt-1 grid grid-cols-2 gap-0.5">
+              {companyItems.map((item) => (
+                <li key={item.href}>
+                  <Link
+                    to={item.href}
+                    onClick={close}
+                    aria-current={isActive(item.href) ? "page" : undefined}
+                    className={cn(
+                      "flex min-h-12 items-center rounded-xl px-4 font-display text-lg font-bold text-deep transition-colors hover:bg-tint",
+                      isActive(item.href) && "bg-tint",
+                    )}
+                  >
+                    {item.label}
+                  </Link>
+                </li>
+              ))}
             </ul>
             <ButtonLink href="/contact" onClick={close} size="lg" arrow className="mt-3 w-full">
-              Book a call
+              Book a free call
             </ButtonLink>
           </nav>
         </>

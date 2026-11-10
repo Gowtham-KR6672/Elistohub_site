@@ -1,17 +1,19 @@
 import { Marquee } from "@/components/marquee";
 import { Container } from "@/components/ui";
 import { marketplaces } from "@/lib/content";
+import { marketplaceByName } from "@/lib/site";
 
 export function Marketplaces() {
-  const half = Math.ceil(marketplaces.length / 2);
-  const rowOne = marketplaces.slice(0, half).map((label) => ({ label }));
-  const rowTwo = [...marketplaces.slice(half).map((label) => ({ label })), { label: "+ your next one", highlight: true }];
+  const items = marketplaces.map((label) => ({ label, href: marketplaceByName[label]?.path }));
+  const half = Math.ceil(items.length / 2);
+  const rowOne = items.slice(0, half);
+  const rowTwo = [...items.slice(half), { label: "+ your next one", highlight: true }];
 
   return (
     <section id="marketplaces" className="border-y border-line bg-off py-14 sm:py-16">
       <Container>
         <p className="reveal text-center font-display text-[22px] font-bold tracking-[-0.02em] text-deep sm:text-[26px]">
-          Selling on all of these? Same. <span className="text-brand">We run them all.</span>
+          Selling on any of these? We got you. <span className="text-brand">We run them all.</span>
         </p>
       </Container>
       <div className="mt-9 flex flex-col gap-3">

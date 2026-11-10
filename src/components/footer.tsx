@@ -10,18 +10,22 @@ export function Footer() {
     <footer className="relative overflow-hidden bg-deep text-[15px] text-frost/80">
       <div className="bg-grid-dark pointer-events-none absolute inset-0 [mask-image:linear-gradient(to_bottom,black,transparent_70%)]" aria-hidden="true" />
       <Container className="relative pt-20 pb-10">
-        <div className="grid gap-12 lg:grid-cols-[1.3fr_2fr]">
+        <div className="grid gap-12 lg:grid-cols-[1.1fr_2fr]">
           <div className="max-w-sm">
             <Link to="/" aria-label="Elistohub home" className="inline-flex rounded-xl">
               <Logo tone="dark" />
             </Link>
-            <p className="mt-5 leading-relaxed">
-              Elistohub is your ecommerce growth and support partner: one senior team behind your marketplaces,
-              operations, marketing, AI and websites, so your brand can scale with confidence, anywhere in the world.
-            </p>
+            <p className="mt-5 font-display text-[22px] leading-snug font-bold text-white">{siteConfig.tagline}</p>
+            <a
+              href={`mailto:${siteConfig.email}`}
+              className="mt-5 inline-flex items-center gap-2 font-semibold text-sun transition-colors hover:text-white"
+            >
+              <Icon name="mail" size={17} />
+              {siteConfig.email}
+            </a>
           </div>
 
-          <div className="grid grid-cols-2 gap-x-8 gap-y-10 sm:grid-cols-[1.25fr_0.8fr_1.1fr_1.3fr]">
+          <div className="grid grid-cols-2 gap-x-8 gap-y-10 sm:grid-cols-3">
             {footerColumns.map((col) => (
               <nav key={col.title} aria-label={col.title}>
                 <p className="mb-4 font-semibold text-white">{col.title}</p>
@@ -36,31 +40,6 @@ export function Footer() {
                 </ul>
               </nav>
             ))}
-            <div>
-              <p className="mb-4 font-semibold text-white">Say hi</p>
-              <ul className="flex flex-col gap-2.5">
-                <li className="flex items-center gap-2">
-                  <Icon name="pin" size={16} className="shrink-0 text-mint" />
-                  {siteConfig.location}
-                </li>
-                <li>
-                  <a href={`mailto:${siteConfig.email}`} className="flex items-center gap-2 [overflow-wrap:anywhere] transition-colors hover:text-sun">
-                    <Icon name="mail" size={16} className="shrink-0 text-mint" />
-                    {siteConfig.email}
-                  </a>
-                </li>
-                <li>
-                  <Link to="/#faq" className="transition-colors hover:text-sun">
-                    FAQ
-                  </Link>
-                </li>
-                <li>
-                  <Link to="/contact" className="transition-colors hover:text-sun">
-                    Contact
-                  </Link>
-                </li>
-              </ul>
-            </div>
           </div>
         </div>
 
@@ -73,7 +52,7 @@ export function Footer() {
 
         <div className="mt-6 flex flex-wrap items-center justify-between gap-x-6 gap-y-3 border-t border-white/10 pt-6 text-sm">
           <p>
-            © {siteConfig.copyrightYear} {siteConfig.name}
+            © {siteConfig.copyrightYear} {siteConfig.name} · {siteConfig.location}
           </p>
           <p className="flex gap-6">
             <Link to="/privacy" className="transition-colors hover:text-sun">

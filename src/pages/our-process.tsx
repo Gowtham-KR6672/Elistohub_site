@@ -8,7 +8,8 @@ export default function OurProcessPage() {
   return (
     <ServiceLayout
       path="/our-process"
-      crumb="Our process"
+      crumbs={[{ label: "Home", href: "/" }, { label: "Our process" }]}
+      ctaLabel="Book a strategy call"
       seoTitle="Our Process & Tools"
       description="From the first call to the monthly report: how working with Elistohub looks, the tools we plug into and how we keep you updated every week."
       eyebrow="Our process"

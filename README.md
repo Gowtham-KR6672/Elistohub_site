@@ -12,20 +12,18 @@ through **Brevo**. The same code deploys two ways:
 
 | Route | Page |
 | --- | --- |
-| `/` | Home: hero, marketplaces, 7 service cards, case studies, FAQ, contact |
-| `/marketplace-management` | D2C & B2B marketplace management |
-| `/order-processing` | Order processing |
-| `/paid-ads` | Paid ads on commission |
-| `/ai-automation` | AI agents & automation (AI support, AI product images, customer service) |
-| `/website-development` | Website design & development |
-| `/marketing` | Marketing: email, SMS & social |
-| `/virtual-assistant` | Ecommerce virtual assistant |
+| `/` | Home: hero, marketplaces, results, who we help, services, why us, case studies, how we start, working with us, FAQ, contact |
+| `/marketplace-management` | Marketplace management (with marketplace picker and B2B wholesale) |
+| `/order-processing`, `/paid-ads`, `/ai-automation`, `/website-development`, `/marketing` | Service pages (shared layout: pain points, what you get, results, FAQ) |
+| `/virtual-assistant` | Ecommerce virtual assistant (plans, tasks, how it works) |
+| `/marketplaces/amazon`, `walmart`, `etsy`, `ebay`, `faire`, `wayfair`, `target-plus`, `home-depot` | Marketplace pages (shared layout) |
 | `/our-process` | Our process + tools & reporting |
+| `/about` | About us |
 | `/contact` | Contact form + FAQ |
 | `/privacy`, `/terms` | Coming soon |
 
-Service pages are listed in `src/lib/site.ts` (`servicePages`, which also drives the Services menu) and routed in
-`src/App.tsx`. Old addresses keep working: `legacyPathRedirects` (e.g. `/websites`) and `legacyHashRedirects`
+Service and marketplace pages are listed in `src/lib/site.ts` (`servicePages`, `marketplacePages`, which also drive the
+menus) with their text in `src/lib/pages.ts`, and routed in `src/App.tsx`. Old addresses keep working: `legacyPathRedirects` (e.g. `/websites`) and `legacyHashRedirects`
 (e.g. `/#ai`, `/#email`) in `src/lib/site.ts` forward them to the new pages. When you add a page, also add it to
 `ROUTES` in `vite.config.ts` for the sitemap.
 

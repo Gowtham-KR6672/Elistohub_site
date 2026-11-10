@@ -37,6 +37,10 @@ export function Highlight({ children, onLoad }: { children: ReactNode; onLoad?: 
 export const headingXL =
   "font-display text-[clamp(2.25rem,4.4vw,4.5rem)] font-extrabold leading-[1.02] tracking-[-0.04em]";
 
+/** Section headings on inner pages (one step smaller than headingXL). */
+export const headingLG =
+  "font-display text-[clamp(1.9rem,3.4vw,3.25rem)] font-extrabold leading-[1.06] tracking-[-0.035em]";
+
 export function SectionHeader({
   eyebrow,
   title,

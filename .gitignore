@@ -30,3 +30,6 @@ elistohub-config.php
 *.suo
 *.sw?
 .claude/
+
+# BigRock upload packages (built locally)
+deploy/

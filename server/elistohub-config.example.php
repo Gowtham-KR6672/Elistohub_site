@@ -29,5 +29,5 @@ return [
     'CONTACT_SEND_CONFIRMATION' => 'false',
 
     // Address shown to visitors if the form can't send.
-    'SITE_EMAIL' => 'hello@elistohub.com',
+    'SITE_EMAIL' => 'info@elistohub.com',
 ];

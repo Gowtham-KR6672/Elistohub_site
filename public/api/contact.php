@@ -17,7 +17,7 @@ header('X-Content-Type-Options: nosniff');
 header('Cache-Control: no-store');
 
 const CONTACT_NEEDS = [
-    'D2C & B2B marketplace management',
+    'Marketplace management',
     'Order processing',
     'Paid ads (commission-based)',
     'AI agents & automation',
@@ -46,7 +46,7 @@ function load_config(): array
         'CONTACT_TO_EMAIL' => '',
         'BREVO_LIST_ID' => '',
         'CONTACT_SEND_CONFIRMATION' => 'false',
-        'SITE_EMAIL' => 'hello@elistohub.com',
+        'SITE_EMAIL' => 'info@elistohub.com',
     ];
 
     $config = [];

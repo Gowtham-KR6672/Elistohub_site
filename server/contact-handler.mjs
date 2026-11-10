@@ -10,7 +10,7 @@
  */
 
 export const CONTACT_NEEDS = [
-  "D2C & B2B marketplace management",
+  "Marketplace management",
   "Order processing",
   "Paid ads (commission-based)",
   "AI agents & automation",
@@ -89,7 +89,7 @@ export function createContactHandler(env, log = console) {
    * @returns {Promise<ContactResult>}
    */
   return async function handleContact({ body, ip = "unknown", origin, host }) {
-    const siteEmail = env.SITE_EMAIL || "hello@elistohub.com";
+    const siteEmail = env.SITE_EMAIL || "info@elistohub.com";
 
     // Only accept submissions coming from this website.
     if (origin && host) {

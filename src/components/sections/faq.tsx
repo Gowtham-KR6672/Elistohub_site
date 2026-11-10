@@ -9,9 +9,9 @@ export function Faq() {
       <Container className="grid gap-12 lg:grid-cols-[0.8fr_1.2fr] lg:gap-20">
         <div className="reveal lg:sticky lg:top-28 lg:self-start">
           <Eyebrow>FAQ</Eyebrow>
-          <h2 className={cn(headingXL, "mt-5 text-deep")}>Questions? We’ve got answers.</h2>
+          <h2 className={cn(headingXL, "mt-5 text-deep")}>The questions everyone asks us.</h2>
           <ButtonLink href="/contact" arrow className="mt-9">
-            Book a strategy call
+            Book a free call
           </ButtonLink>
         </div>
         <Accordion items={faqs} />

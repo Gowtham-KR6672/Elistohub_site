@@ -3,14 +3,18 @@ import { NumberedSteps } from "@/components/steps";
 import { CheckItem, Container, Highlight, headingXL } from "@/components/ui";
 import { cn } from "@/lib/cn";
 import { vaPlans, vaSteps, vaTasks } from "@/lib/content";
+import { servicePageBySlug } from "@/lib/site";
 import { ServiceLayout } from "./service-layout";
 
 const sectionHeading = cn(headingXL, "reveal text-deep");
+const page = servicePageBySlug["virtual-assistant"];
 
 export default function VirtualAssistantPage() {
   return (
     <ServiceLayout
-      slug="virtual-assistant"
+      path={page.path}
+      crumbs={[{ label: "Home", href: "/" }, { label: "Services", href: "/#services" }, { label: page.name }]}
+      need={page.need}
       seoTitle="Ecommerce Virtual Assistant, Pay As You Go"
       description="Book an ecommerce-trained virtual assistant by the hour. Pay as you go, buy monthly hours or get a dedicated VA. No long-term contract."
       eyebrow="Ecommerce virtual assistant"
@@ -20,7 +24,6 @@ export default function VirtualAssistantPage() {
         </>
       }
       intro="An ecommerce-trained assistant who already knows Shopify, Amazon and the marketplaces. Use them for a few hours this week, more next month, or none at all. No long-term contract."
-      ctaLabel="Book a free call"
     >
       {/* Plans */}
       <section className="bg-off py-20 sm:py-24" aria-labelledby="va-plans">

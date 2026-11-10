@@ -4,7 +4,7 @@ import react from "@vitejs/plugin-react";
 import { defineConfig, loadEnv, type Plugin } from "vite";
 import { devContactApi } from "./server/dev-contact.ts";
 
-// Live pages for sitemap.xml (keep in sync with livePaths in src/lib/site.ts)
+// Live pages for sitemap.xml (keep in sync with the routes in src/App.tsx)
 const ROUTES = [
   "/",
   "/marketplace-management",
@@ -14,7 +14,16 @@ const ROUTES = [
   "/website-development",
   "/marketing",
   "/virtual-assistant",
+  "/marketplaces/amazon",
+  "/marketplaces/walmart",
+  "/marketplaces/etsy",
+  "/marketplaces/ebay",
+  "/marketplaces/faire",
+  "/marketplaces/wayfair",
+  "/marketplaces/target-plus",
+  "/marketplaces/home-depot",
   "/our-process",
+  "/about",
   "/contact",
 ];
 

@@ -45,7 +45,7 @@ function Art({ art }: { art: CaseStudy["art"] }) {
 
 export function CaseStudies() {
   return (
-    <section id="work" className="py-24 sm:py-32">
+    <section id="work" className="bg-off py-24 sm:py-32">
       <Container>
         <SectionHeader
           eyebrow="Case studies"
